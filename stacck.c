@@ -16,13 +16,17 @@ void freeStack(Stack* stack) {
         free(temp->student.name);
         free(temp);
     }
+    stack->top = NULL;
 }
 
+
 void addStudent(Stack* stack, const char* name, int birthYear, int direction) {
-    Student student;
+    Student student = { 0 };
     student.name = malloc(strlen(name) + 1);
+
     if (student.name == NULL) {
         handleError("Blad alokacji pamieci.");
+        return;
     }
     strcpy_s(student.name, strlen(name) + 1, name);
     student.birthYear = birthYear;
@@ -31,7 +35,9 @@ void addStudent(Stack* stack, const char* name, int birthYear, int direction) {
     Node* newNode = malloc(sizeof(Node));
     if (newNode == NULL) {
         handleError("Blad alokacji pamieci.");
+        return;
     }
+
     newNode->student = student;
     newNode->next = stack->top;
 
@@ -64,7 +70,7 @@ void printStudents(Stack* stack) {
 
     Node* current = stack->top;
     while (current != NULL) {
-        printf("Imie i nazwisko: %s\n", current->student.name);
+        printf("Nazwisko: %s\n", current->student.name);
         printf("Rok urodzenia: %d\n", current->student.birthYear);
         printf("Kierunek studiow: %d\n", current->student.direction);
         printf("\n");
@@ -75,12 +81,14 @@ void printStudents(Stack* stack) {
 void saveStackToFile(Stack* stack, const char* filename) {
     FILE* file;
     if (fopen_s(&file, filename, "wb") != 0) {
-        handleError("Nie mozna otworzyc pliku do zapisu.");
+        handleError("Nie mo¿na otworzyæ pliku do zapisu.");
+        return;
     }
+
 
     Node* current = stack->top;
     while (current != NULL) {
-        if (fwrite(&current->student, sizeof(Student), 1, file) != 1) {
+        if (file != NULL && fwrite(&current->student, sizeof(Student), 1, file) != 1) {
             handleError("Blad zapisu do pliku.");
         }
         current = current->next;
@@ -93,8 +101,9 @@ void saveStackToFile(Stack* stack, const char* filename) {
 
 void loadStackFromFile(Stack* stack, const char* filename) {
     FILE* file;
-    if (fopen_s(&file, filename, "rb") != 0) {
-        handleError("Nie mozna otworzyc pliku do odczytu.");
+    if (fopen_s(&file, filename, "rb") != 0 || file == NULL) {
+        handleError("Nie mo¿na otworzyæ pliku do odczytu.");
+        return;
     }
 
     freeStack(stack);

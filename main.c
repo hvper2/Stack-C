@@ -25,8 +25,8 @@ int main() {
 
         switch (choice) {
         case 1:
-            printf("Podaj imie i nazwisko studenta: ");
-            scanf_s("%s", name, sizeof(name));
+            printf("Podaj nazwisko studenta: ");
+            scanf_s("%s", name, (unsigned int)sizeof(name));
             printf("Podaj rok urodzenia studenta: ");
             scanf_s("%u", &year);
             printf("Podaj kierunek studiow (0-4): ");
