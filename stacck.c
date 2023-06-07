@@ -4,14 +4,17 @@
 #include "stacck.h"
 #include "error_handling.h"
 
-void initStack(Stack* stack) {
+void initStack(Stack *stack)
+{
     stack->top = NULL;
 }
 
-void freeStack(Stack* stack) {
-    Node* current = stack->top;
-    while (current != NULL) {
-        Node* temp = current;
+void freeStack(Stack *stack)
+{
+    Node *current = stack->top;
+    while (current != NULL)
+    {
+        Node *temp = current;
         current = current->next;
         free(temp->student.name);
         free(temp);
@@ -19,12 +22,13 @@ void freeStack(Stack* stack) {
     stack->top = NULL;
 }
 
-
-void addStudent(Stack* stack, const char* name, int birthYear, int direction) {
-    Student student = { 0 };
+void addStudent(Stack *stack, const char *name, int birthYear, int direction)
+{
+    Student student = {0};
     student.name = malloc(strlen(name) + 1);
 
-    if (student.name == NULL) {
+    if (student.name == NULL)
+    {
         handleError("Blad alokacji pamieci.");
         return;
     }
@@ -32,8 +36,9 @@ void addStudent(Stack* stack, const char* name, int birthYear, int direction) {
     student.birthYear = birthYear;
     student.direction = direction;
 
-    Node* newNode = malloc(sizeof(Node));
-    if (newNode == NULL) {
+    Node *newNode = malloc(sizeof(Node));
+    if (newNode == NULL)
+    {
         handleError("Blad alokacji pamieci.");
         return;
     }
@@ -46,14 +51,15 @@ void addStudent(Stack* stack, const char* name, int birthYear, int direction) {
     printf("Dodano studenta.\n");
 }
 
-
-void removeStudent(Stack* stack) {
-    if (stack->top == NULL) {
+void removeStudent(Stack *stack)
+{
+    if (stack->top == NULL)
+    {
         printf("Stos jest pusty.\n");
         return;
     }
 
-    Node* topNode = stack->top;
+    Node *topNode = stack->top;
     stack->top = topNode->next;
 
     printf("Usunieto studenta.\n");
@@ -62,14 +68,17 @@ void removeStudent(Stack* stack) {
     free(topNode);
 }
 
-void printStudents(Stack* stack) {
-    if (stack->top == NULL) {
+void printStudents(Stack *stack)
+{
+    if (stack->top == NULL)
+    {
         printf("Stos jest pusty.\n");
         return;
     }
 
-    Node* current = stack->top;
-    while (current != NULL) {
+    Node *current = stack->top;
+    while (current != NULL)
+    {
         printf("Nazwisko: %s\n", current->student.name);
         printf("Rok urodzenia: %d\n", current->student.birthYear);
         printf("Kierunek studiow: %d\n", current->student.direction);
@@ -78,17 +87,20 @@ void printStudents(Stack* stack) {
     }
 }
 
-void saveStackToFile(Stack* stack, const char* filename) {
-    FILE* file;
-    if (fopen_s(&file, filename, "wb") != 0) {
-        handleError("Nie mo¿na otworzyæ pliku do zapisu.");
+void saveStackToFile(Stack *stack, const char *filename)
+{
+    FILE *file;
+    if (fopen_s(&file, filename, "wb") != 0)
+    {
+        handleError("Nie moï¿½na otworzyï¿½ pliku do zapisu.");
         return;
     }
 
-
-    Node* current = stack->top;
-    while (current != NULL) {
-        if (file != NULL && fwrite(&current->student, sizeof(Student), 1, file) != 1) {
+    Node *current = stack->top;
+    while (current != NULL)
+    {
+        if (file != NULL && fwrite(&current->student, sizeof(Student), 1, file) != 1)
+        {
             handleError("Blad zapisu do pliku.");
         }
         current = current->next;
@@ -98,18 +110,20 @@ void saveStackToFile(Stack* stack, const char* filename) {
     printf("Stos zostal zapisany do pliku.\n");
 }
 
-
-void loadStackFromFile(Stack* stack, const char* filename) {
-    FILE* file;
-    if (fopen_s(&file, filename, "rb") != 0 || file == NULL) {
-        handleError("Nie mo¿na otworzyæ pliku do odczytu.");
+void loadStackFromFile(Stack *stack, const char *filename)
+{
+    FILE *file;
+    if (fopen_s(&file, filename, "rb") != 0 || file == NULL)
+    {
+        handleError("Nie moï¿½na otworzyï¿½ pliku do odczytu.");
         return;
     }
 
     freeStack(stack);
 
     Student student;
-    while (fread(&student, sizeof(Student), 1, file) == 1) {
+    while (fread(&student, sizeof(Student), 1, file) == 1)
+    {
         addStudent(stack, student.name, student.birthYear, student.direction);
     }
 

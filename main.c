@@ -2,7 +2,8 @@
 #include <stdlib.h>
 #include "stacck.h"
 
-int main() {
+int main()
+{
     Stack stack;
     initStack(&stack);
 
@@ -11,7 +12,8 @@ int main() {
     char name[64];
     int direction;
 
-    do {
+    do
+    {
         printf("--------StackMenu-------\n");
         printf("1. Dodaj studenta\n");
         printf("2. Usun studenta\n");
@@ -23,7 +25,8 @@ int main() {
         printf("Wybierz opcje: ");
         scanf_s("%d", &choice);
 
-        switch (choice) {
+        switch (choice)
+        {
         case 1:
             printf("Podaj nazwisko studenta: ");
             scanf_s("%s", name, (unsigned int)sizeof(name));
